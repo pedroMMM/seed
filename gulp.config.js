@@ -71,7 +71,7 @@ module.exports = function () {
 
         report: report,
 
-        html: client + '**/*.html',
+        html: clientApp + '**/*.html',
 
         htmltemplates: clientApp + '**/*.html',
 
