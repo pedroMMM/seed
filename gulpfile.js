@@ -159,7 +159,55 @@ gulp.task('clean-templatecache', function (cb) {
     clean(files, cb);
 });
 
-gulp.task('optimize', ['inject', 'test'], function () {
+//gulp.task('optimize', ['inject', 'test'], function () {
+//    log('Optimizing the js, css, html and inject them on the build index');
+//
+//    var templateCache = config.tmp + config.templateCache.file;
+//
+//    var assets = $.useref.assets({
+//        searchPath: './'
+//    });
+//
+//    var cssFilter = $.filter('**/*.css', {
+//        restore: true
+//    });
+//    var jsLibFilter = $.filter('**/' + config.optimized.lib, {
+//        restore: true
+//    });
+//    var jsAppFilter = $.filter('**/' + config.optimized.app, {
+//        restore: true
+//    });
+//
+//    return gulp
+//        .src(config.index)
+//        .pipe($.plumber())
+//        .pipe($.inject(gulp.src(templateCache, {
+//            read: false
+//        }), {
+//            starttag: '<!--    inject:templates:js   -->'
+//        }))
+//        .pipe(assets)
+//        .pipe(cssFilter)
+//        .pipe($.csso())
+//        .pipe(cssFilter.restore)
+//        .pipe(jsLibFilter)
+//        .pipe($.uglify())
+//        .pipe(jsLibFilter.restore)
+//        .pipe(jsAppFilter)
+//        .pipe($.ngAnnotate())
+//        .pipe($.uglify())
+//        .pipe(jsAppFilter.restore)
+//        .pipe($.rev())
+//        .pipe(assets.restore())
+//        .pipe($.useref())
+//        .pipe($.revReplace())
+//        .pipe(gulp.dest(config.build))
+//        .pipe($.rev.manifest())
+//        .pipe(gulp.dest(config.build));
+//});
+
+
+gulp.task('optimize', function () {
     log('Optimizing the js, css, html and inject them on the build index');
 
     var templateCache = config.tmp + config.templateCache.file;
@@ -181,28 +229,10 @@ gulp.task('optimize', ['inject', 'test'], function () {
     return gulp
         .src(config.index)
         .pipe($.plumber())
-        .pipe($.inject(gulp.src(templateCache, {
-            read: false
-        }), {
-            starttag: '<!--    inject:templates:js   -->'
-        }))
         .pipe(assets)
-        .pipe(cssFilter)
-        .pipe($.csso())
-        .pipe(cssFilter.restore)
-        .pipe(jsLibFilter)
-        .pipe($.uglify())
-        .pipe(jsLibFilter.restore)
-        .pipe(jsAppFilter)
-        .pipe($.ngAnnotate())
-        .pipe($.uglify())
-        .pipe(jsAppFilter.restore)
-        .pipe($.rev())
         .pipe(assets.restore())
         .pipe($.useref())
-        .pipe($.revReplace())
-        .pipe(gulp.dest(config.build))
-        .pipe($.rev.manifest())
+        .pipe($.print())
         .pipe(gulp.dest(config.build));
 });
 

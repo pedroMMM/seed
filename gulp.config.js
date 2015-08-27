@@ -42,7 +42,7 @@ module.exports = function () {
             '!' + clientApp + '**/*.spec.js'
         ],
 
-        build: './build/',
+        build: './www/',
 
         client: client,
 
@@ -87,7 +87,7 @@ module.exports = function () {
         bower: {
             json: require('./bower.json'),
             directory: ('./bower_components/'),
-            ignorePath: '../..'
+            ignorePath: '..'
         },
 
         packages: [
