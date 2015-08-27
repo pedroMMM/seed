@@ -64,7 +64,6 @@ gulp.task('wiredep', function () {
         .pipe(gulp.dest(config.client));
 });
 
-
 /////////////////////// templatecache as a dependecy
 gulp.task('inject', ['wiredep'], function () {
     log('Wire up our css into the html and call wiredep');
@@ -187,10 +186,10 @@ gulp.task('clean-templatecache', function (cb) {
 //        .pipe(gulp.dest(config.build));
 //});
 
-
 gulp.task('cordova', ['clean-code'], function () {
     log('Moving cordova.js');
-    return gulp.src(gulp.client + 'cordova.js')
+
+    return gulp.src(config.client + 'cordova.js')
         .pipe(gulp.dest(config.build));
 });
 
@@ -216,7 +215,8 @@ gulp.task('optimize', ['cordova', 'inject'], function () {
         .pipe(gulp.dest(config.build));
 });
 
-gulp.task('test', ['vet', 'templatecache', 'clean-test'], function (cb) {
+/////////////////////// templatecache as a dependecy
+gulp.task('test', ['vet', 'clean-test'], function (cb) {
     startTests(true, cb);
 });
 
@@ -272,12 +272,12 @@ gulp.task('build-specs', ['templatecache'], function () {
             name: 'inject:templates',
             read: false
         }))
-        .pipe(gulp.dest(config.client));
+        .pipe(gulp.dest(config.root));
 });
 
 gulp.task('serve-specs', ['build-specs'], function (cb) {
     log('Running the spec runner');
-    serve(true, true);
+    serve(false, true);
     cb();
 });
 
@@ -290,20 +290,11 @@ function startTests(singleRun, cb) {
     var serverSpecs = config.serverIntegrationSpecs;
     var excludeFiles = serverSpecs;
 
-    var options = {
-        configFile: __dirname + '/karma.conf.js',
-        exclude: excludeFiles,
-        singleRun: !!singleRun
-    };
-
     karma.start({
         configFile: __dirname + '/karma.conf.js',
         exclude: excludeFiles,
         singleRun: !!singleRun
     }, karmaCompleted);
-
-    //    karma = new Server(options, [karmaCompleted]);
-    //    karma.start();
 
     function karmaCompleted(karmaResult) {
         log('Karma completed!');
@@ -326,10 +317,16 @@ function serve(isDev, specRunner) {
         ]).on('change', function (event) {
         changeEvent(event);
     });
-    cli.exec('ionic serve -l', {
-        async: true
-    });
 
+    if (specRunner) {
+        startBrowserSync();
+    }
+
+    if (isDev) {
+        cli.exec('ionic serve -l', {
+            async: true
+        });
+    }
 
 }
 
@@ -349,52 +346,34 @@ function notify(options) {
     notifier.notify(notifyOptions);
 }
 
-function startBrowserSync(isDev, specRunner) {
+function startBrowserSync() {
     if (args.nosync || browserSync.active) {
         return;
     }
 
     log('Starting browser-sync on port ' + port);
 
-    if (isDev) {
-        gulp.watch(config.less, ['styles-browser-sync'])
-            .on('change', function (event) {
-                changeEvent(event);
-            });
-    } else {
-
-        var watch = [
-            config.less,
-            config.js,
-            config.html
-        ];
-
-        var dependencies = [
-            'optimize',
-            browserSync.reload()
-        ];
-
-        gulp.watch([
-            config.less,
+    gulp.watch([
+            config.css,
             config.js,
             config.html
         ], [
             'optimize',
             browserSync.reload
         ]).on('change', function (event) {
-            changeEvent(event);
-        });
-    }
+        changeEvent(event);
+    });
 
     var options = {
-        proxy: 'localhost:' + port,
+        //        proxy: 'localhost:' + port,
+        server: {
+            index: 'specs.html'
+        },
         port: 3000,
-        files: isDev ? [
-            config.allclient,
-            '!' + config.allless,
-            '!' + config.allcss
-            /* I had to remove ./ from the path because browser-sync */
-        ] : [],
+        files: [
+            config.allbuild,
+            config.specs
+        ],
         ghostMode: {
             clicks: true,
             location: false,
@@ -404,17 +383,16 @@ function startBrowserSync(isDev, specRunner) {
         injectChanges: true,
         logFileChaanges: true,
         logLevel: 'debug',
-        logPrefix: 'gulp-patterns',
+        logPrefix: 'browser-sync',
         notify: true,
         reloadDelay: 1000,
         /*browser: [win->'chrome', mac->'google chrome'],*/
-        browser: ['google chrome'],
+        //        browser: ['google chrome'],
+
         open: true
     };
 
-    if (specRunner) {
-        options.startPath = config.specRunnerFile;
-    }
+    options.startPath = config.specRunnerFile;
 
     browserSync(options);
 }

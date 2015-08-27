@@ -16,6 +16,8 @@ module.exports = function () {
 
     var specRunnerFile = 'specs.html';
 
+    var build = './www/';
+
     var bowerFiles = wiredep({
         devDependencies: true
     })['js'];
@@ -42,11 +44,13 @@ module.exports = function () {
             '!' + clientApp + '**/*.spec.js'
         ],
 
-        build: './www/',
+        build: build,
 
         client: client,
 
         allclient: client + '**/*.*',
+
+        allbuild: build + '**/*.*',
 
         fonts: './bower_components/font-awesome/fonts/**/*.*',
 
@@ -127,7 +131,7 @@ module.exports = function () {
 
         serverIntegrationSpecs: [client + 'tests/server-integration/**/*.spec.js'],
 
-        specRunner: client + specRunnerFile,
+        specRunner: root + specRunnerFile,
 
         specRunnerFile: specRunnerFile,
 
