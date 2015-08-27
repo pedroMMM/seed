@@ -29,18 +29,6 @@ gulp.task('vet', function () {
         .pipe($.jshint.reporter('fail'));
 });
 
-gulp.task('styles', ['clean-styles'], function () {
-    log('Compileing less --> CSS');
-    return gulp
-        .src(config.less)
-        .pipe($.plumber())
-        .pipe($.less())
-        .pipe($.autoprefixer({
-            browsers: ['> 2%']
-        }))
-        .pipe(gulp.dest(config.tmp));
-});
-
 gulp.task('styles-browser-sync', ['clean-styles'], function () {
     log('Compileing less --> CSS');
     return gulp
@@ -52,12 +40,6 @@ gulp.task('styles-browser-sync', ['clean-styles'], function () {
         }))
         .pipe(gulp.dest(config.tmp))
         .pipe(browserSync.stream());
-});
-
-gulp.task('clean-styles', function (cb) {
-    log('Cleaing styles');
-    var files = [config.tmp + '**/*.css'];
-    clean(files, cb);
 });
 
 gulp.task('less-watcher', function () {
@@ -81,7 +63,9 @@ gulp.task('wiredep', function () {
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function () {
+
+//////////////////////////////////////////// templatecache as a dependecy
+gulp.task('inject', ['wiredep'], function () {
     log('Wire up our css into the html and call wiredep');
 
     return gulp

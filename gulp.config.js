@@ -56,7 +56,8 @@ module.exports = function () {
 
         allless: '**/*.less',
 
-        css: tmp + 'styles.css',
+        //        css: tmp + 'styles.css',
+        css: client + '**/*.css',
 
         allcss: '**/*.css',
 

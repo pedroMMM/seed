@@ -6,16 +6,20 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
+    <!-- DONE
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+-->
 
     <!--    build:css styles/lib.css    -->
     <!--    bower:css   -->
+    <link rel="stylesheet" href="../bower_components/ionic/css/ionic.css" />
     <!--    endbower    -->
     <!--    endbuild    -->
 
     <!--    build:css styles/app.css    -->
     <!--    inject:css   -->
+    <link rel="stylesheet" href="/src/css/style.css">
     <!--    endinject    -->
     <!--    endbuild    -->
 
@@ -24,17 +28,20 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
-    <!-- ionic/angularjs js -->
+    <!--DONE
+     ionic/angularjs js
     <script src="lib/ionic/js/ionic.bundle.js"></script>
+-->
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
 
-    <!-- your app's js -->
+
+    <!-- DONE
+     your app's js
     <script src="js/app.js"></script>
+-->
 </head>
 
-<body ng-app="starter">
+<body ng-app="starter" ng-strict-di>
 
     <ion-pane>
         <ion-header-bar class="bar-stable">
@@ -47,13 +54,22 @@
 
     <!--    build:js js/lib.js    -->
     <!--    bower:js   -->
-
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/ionic/js/ionic.js"></script>
+    <script src="../bower_components/ionic/js/ionic-angular.js"></script>
     <!--    endbower    -->
     <!--    endbuild    -->
 
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+
     <!--    build:js js/app.js    -->
     <!--    inject:js   -->
-
+    <script src="/src/app/app.js"></script>
     <!--    endinject    -->
 
     <!--    inject:templates:js   -->
