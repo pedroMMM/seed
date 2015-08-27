@@ -2,7 +2,7 @@ module.exports = function () {
 
     var root = './';
 
-    var client = './src/client/';
+    var client = './src/';
 
     var clientApp = client + 'app/';
 
