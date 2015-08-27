@@ -7,6 +7,8 @@ plugins
 bower_components
 www/
 report
+tmp
+resources
 
 
 # OS generated files #

@@ -1,4 +1,7 @@
 {
   "name": "seed",
-  "app_id": ""
+  "app_id": "",
+  "watchPatterns": [
+    "www/index.html"
+  ]
 }

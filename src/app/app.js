@@ -6,6 +6,7 @@
         .module('app', [
         'ionic',
         'blocks.router',
-        'app.core'
+        'app.core',
+        'app.test'
         ]);
 })();

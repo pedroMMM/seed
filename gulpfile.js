@@ -64,8 +64,7 @@ gulp.task('wiredep', function () {
         .pipe(gulp.dest(config.client));
 });
 
-/////////////////////// templatecache as a dependecy
-gulp.task('inject', ['wiredep'], function () {
+gulp.task('inject', ['wiredep', 'templatecache'], function () {
     log('Wire up our css into the html and call wiredep');
 
     return gulp
@@ -186,7 +185,8 @@ gulp.task('clean-templatecache', function (cb) {
 //        .pipe(gulp.dest(config.build));
 //});
 
-gulp.task('cordova', ['clean-code'], function () {
+//['clean-code'],
+gulp.task('cordova', function () {
     log('Moving cordova.js');
 
     return gulp.src(config.client + 'cordova.js')
@@ -196,6 +196,8 @@ gulp.task('cordova', ['clean-code'], function () {
 gulp.task('optimize', ['cordova', 'inject'], function () {
     log('Optimizing the js, css, html and inject them on the build index');
 
+    var templateCache = config.tmp + config.templateCache.file;
+
     var assets = $.useref.assets({
         searchPath: './'
     });
@@ -203,6 +205,11 @@ gulp.task('optimize', ['cordova', 'inject'], function () {
     return gulp
         .src(config.index)
         .pipe($.plumber())
+        .pipe($.inject(gulp.src(templateCache, {
+            read: false
+        }), {
+            starttag: '<!--    inject:templates:js   -->'
+        }))
         .pipe(assets)
         .pipe(assets.restore())
         .pipe($.useref())
