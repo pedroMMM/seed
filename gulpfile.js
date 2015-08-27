@@ -212,7 +212,6 @@ gulp.task('optimize', ['cordova', 'inject'], function () {
             starttag: '<!--    inject:cordova   -->',
             ignorePath: '/www/'
         }))
-        .pipe($.print())
         .pipe(gulp.dest(config.build));
 });
 
