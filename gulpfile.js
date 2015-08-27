@@ -64,7 +64,7 @@ gulp.task('wiredep', function () {
 });
 
 
-//////////////////////////////////////////// templatecache as a dependecy
+/////////////////////// templatecache as a dependecy
 gulp.task('inject', ['wiredep'], function () {
     log('Wire up our css into the html and call wiredep');
 
@@ -81,22 +81,6 @@ gulp.task('serve-dev', ['inject'], function () {
 
 gulp.task('serve-build', ['build'], function () {
     serve(false);
-});
-
-gulp.task('fonts', ['clean-fonts'], function () {
-    log('Copying fonts');
-
-    return gulp
-        .src(config.fonts)
-        .pipe($.plumber())
-        .pipe(gulp.dest(config.build + 'fonts'));
-});
-
-gulp.task('clean-fonts', function (cb) {
-    log('Cleaing fonts');
-
-    var files = [config.build + 'fonts/**/*.*'];
-    clean(files, cb);
 });
 
 gulp.task('images', ['clean-images'], function () {
@@ -119,13 +103,9 @@ gulp.task('clean-images', function (cb) {
 });
 
 gulp.task('clean-code', function (cb) {
-    log('Cleaing code from build and tmp folders');
+    log('Cleaing code from build folder');
 
-    var files = [].concat(
-        config.build + '**/*.html',
-        config.build + 'js/**/*.js',
-        config.tmp + '**/*.js'
-    );
+    var files = [config.build + '**/*.*'];
     clean(files, cb);
 });
 
@@ -207,23 +187,17 @@ gulp.task('clean-templatecache', function (cb) {
 //});
 
 
-gulp.task('optimize', function () {
-    log('Optimizing the js, css, html and inject them on the build index');
+gulp.task('cordova', ['clean-code'], function () {
+    log('Moving cordova.js');
+    return gulp.src(gulp.client + 'cordova.js')
+        .pipe(gulp.dest(config.build));
+});
 
-    var templateCache = config.tmp + config.templateCache.file;
+gulp.task('optimize', ['cordova', 'inject'], function () {
+    log('Optimizing the js, css, html and inject them on the build index');
 
     var assets = $.useref.assets({
         searchPath: './'
-    });
-
-    var cssFilter = $.filter('**/*.css', {
-        restore: true
-    });
-    var jsLibFilter = $.filter('**/' + config.optimized.lib, {
-        restore: true
-    });
-    var jsAppFilter = $.filter('**/' + config.optimized.app, {
-        restore: true
     });
 
     return gulp
@@ -232,32 +206,14 @@ gulp.task('optimize', function () {
         .pipe(assets)
         .pipe(assets.restore())
         .pipe($.useref())
+        .pipe($.inject(gulp.src(config.build + 'cordova.js', {
+            read: false
+        }), {
+            starttag: '<!--    inject:cordova   -->',
+            ignorePath: '/www/'
+        }))
         .pipe($.print())
         .pipe(gulp.dest(config.build));
-});
-
-gulp.task('bump', function () {
-    var msg = 'Bumping versions';
-    var type = args.type;
-    var version = args.version;
-    var options = {};
-
-    if (version) {
-        options.version = version;
-        msg += ' to ' + version;
-    } else {
-        options.type = type;
-        msg += ' for a ' + type;
-    }
-
-    log(msg);
-
-    return gulp
-        .src(config.packages)
-        .pipe($.plumber())
-        .pipe($.print())
-        .pipe($.bump(options))
-        .pipe(gulp.dest(config.root));
 });
 
 gulp.task('test', ['vet', 'templatecache', 'clean-test'], function (cb) {
@@ -275,7 +231,7 @@ gulp.task('clean-test', function (cb) {
     clean(files, cb);
 });
 
-gulp.task('build', ['optimize', 'images', 'fonts'], function () {
+gulp.task('build', ['optimize', 'images'], function () {
     log('Building everything');
 
     var msg = {

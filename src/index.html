@@ -6,13 +6,13 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <!--    build:css styles/lib.css    -->
+    <!--    build:css css/lib.css    -->
     <!--    bower:css   -->
     <link rel="stylesheet" href="/bower_components/ionic/css/ionic.css" />
     <!--    endbower    -->
     <!--    endbuild    -->
 
-    <!--    build:css styles/app.css    -->
+    <!--    build:css css/app.css    -->
     <!--    inject:css   -->
     <link rel="stylesheet" href="/src/css/style.css">
     <!--    endinject    -->
@@ -30,9 +30,14 @@
     <!--    endbuild    -->
 
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+    <!--
+<script src="cordova.js">
+</script>
 
+-->
+
+    <!--    inject:cordova   -->
+    <!--    endinject    -->
 
     <!--    build:js js/app.js    -->
     <!--    inject:js   -->
@@ -45,7 +50,7 @@
 
 </head>
 
-<body ng-app="starter" ng-strict-di>
+<body ng-app="starter">
 
     <ion-pane>
         <ion-header-bar class="bar-stable">
