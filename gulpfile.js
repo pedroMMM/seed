@@ -7,6 +7,7 @@ var path = require('path');
 var _ = require('lodash');
 var wiredep = require('wiredep').stream;
 var port = process.env.PORT || config.defaultPort;
+var cli = require('shelljs');
 var $ = require('gulp-load-plugins')({
     lazy: true
 });
@@ -75,7 +76,7 @@ gulp.task('inject', ['wiredep'], function () {
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('serve-dev', ['inject'], function () {
+gulp.task('serve-dev', ['optimize'], function () {
     serve(true);
 });
 
@@ -316,37 +317,20 @@ function startTests(singleRun, cb) {
 
 function serve(isDev, specRunner) {
 
-    var nodeOptions = {
-        script: config.nodeServer,
-        delayTime: 1,
-        env: {
-            'PORT': port,
-            'NODE_ENV': isDev ? 'dev' : 'build'
-        },
-        watch: [config.server]
-    };
+    gulp.watch([
+            config.css,
+            config.js,
+            config.html
+        ], [
+            'optimize'
+        ]).on('change', function (event) {
+        changeEvent(event);
+    });
+    cli.exec('ionic serve -l', {
+        async: true
+    });
 
-    return $.nodemon(nodeOptions)
-        .on('restart', function (ev) {
-            log('*** nodemon restarted');
-            log('files changed on restart:\n' + ev);
-            setTimeout(function () {
-                browserSync.notify('Realoading now ...');
-                browserSync.reload({
-                    stream: false
-                });
-            }, config.browserReloadDelay);
-        })
-        .on('start', function () {
-            log('*** nodemon started');
-            startBrowserSync(isDev, specRunner);
-        })
-        .on('crash', function () {
-            log('*** nodemon crached');
-        })
-        .on('exit', function () {
-            log('*** nodemon exited cleanly');
-        });
+
 }
 
 function changeEvent(event) {

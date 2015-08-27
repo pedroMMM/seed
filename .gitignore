@@ -5,7 +5,7 @@ node_modules
 platforms
 plugins
 bower_components
-www
+www/
 
 
 # OS generated files #
