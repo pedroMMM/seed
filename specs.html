@@ -53,23 +53,34 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/ionic/js/ionic.js"></script>
     <script src="bower_components/ionic/js/ionic-angular.js"></script>
+    <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <script src="bower_components/sinon/index.js"></script>
     <script src="bower_components/bardjs/dist/bard.js"></script>
     <script src="bower_components/bardjs/dist/bard-ngRouteTester.js"></script>
     <!-- endbower -->
 
     <!-- inject:js -->
+    <script src="/src/app/core/core.module.js"></script>
+    <script src="/src/app/test/test.module.js"></script>
+    <script src="/src/app/blocks/router/router.module.js"></script>
     <script src="/src/app/app.js"></script>
+    <script src="/src/app/core/core.config.js"></script>
+    <script src="/src/app/test/test.controller.js"></script>
+    <script src="/src/app/test/test.route.js"></script>
+    <script src="/src/app/blocks/router/router.provider.js"></script>
     <!-- endinject -->
 
     <!-- inject:spechelpers:js -->
     <!-- endinject -->
 
     <!-- inject:specs:js -->
-    <script src="/src/app/test.spec.js"></script>
+    <script src="/src/app/test/test.spec.js"></script>
+    <script src="/src/app/blocks/router/router.provider.spec.js"></script>
     <!-- endinject -->
 
     <!-- inject:templates:js -->
+    <script src="/tmp/templates.js"></script>
     <!-- endinject -->
 
     <script>
